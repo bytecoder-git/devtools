@@ -4,25 +4,30 @@ Welcome to my collection of development scripts and tools for full-stack develop
 
 ## Tools Summary
 
-### 1. Xcode Project Rename Utility
-**Location:** xcode/rename_project
+### 1. JWT Decoding Script
+**Location:** web/jwt/jwt_decode
 
-A Python script that automates the process of renaming an Xcode project. It updates file contents, renames directories and files, and works with Git repositories.
+A Bash script that decodes JSON Web Tokens (JWTs) directly from the command line, supporting input via command-line argument or stdin.
 
-### 2. Mobile App Icon Generator
+### 2. Markdown to DOCX Converter
+**Location:** text/md_to_docx
+
+A Python script that converts Markdown files to DOCX format with advanced formatting and structure preservation.
+
+### 3. Mobile App Icon Generator
 **Location:** mobile/icon_generator
 
 A Python script that generates app icons for iOS and Android platforms from a single source image. It creates icons in various required sizes and formats for both platforms.
 
-### 3. Tarty: AI-Friendly Archive Creator
+### 4. Tarty: AI-Friendly Archive Creator
 **Location:** ai/tarty
 
 A Python script that creates compressed custom archives suitable for AI ingestion by processing and compressing text files from a given directory.
 
-### 4. JWT Decoding Script
-**Location:** web/jwt/jwt_decode
+### 5. Xcode Project Rename Utility
+**Location:** xcode/rename_project
 
-A Bash script that decodes JSON Web Tokens (JWTs) directly from the command line, supporting input via command-line argument or stdin.
+A Python script that automates the process of renaming an Xcode project. It updates file contents, renames directories and files, and works with Git repositories.
 
 For detailed instructions on how to use each tool, please refer to the README.md file in its respective directory.
 
@@ -36,10 +41,11 @@ The `install.toml` file contains a list of all scripts and tools that will be in
 
 ```toml
 files = [
-    "xcode/rename_project/xcode_rename_project.py",
-    "mobile/icon_generator/mobile_generate_app_icons.py",
     "ai/tarty/tarty.py",
+    "mobile/icon_generator/mobile_generate_app_icons.py",
+    "text/md_to_docx/md_to_docx.py",
     "web/jwt/jwt_decode.sh",
+    "xcode/rename_project/xcode_rename_project.py",
     # Add more files here as needed
 ]
 ```

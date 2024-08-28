@@ -1,6 +1,7 @@
 files = [
 	"ai/tarty/tarty.py",
 	"mobile/icon_generator/mobile_generate_app_icons.py",
+	"text/md_to_docx/md_to_docx.py",
 	"web/jwt/jwt_decode.sh",
 	"xcode/rename_project/xcode_rename_project.py",
 ]

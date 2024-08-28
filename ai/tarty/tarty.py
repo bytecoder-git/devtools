@@ -10,7 +10,7 @@ from pathspec.patterns import GitWildMatchPattern
 
 # File extensions to process
 TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
-CODE_EXTENSIONS = ['.c', '.cpp', '.h', '.hh', '.hpp', '.m', '.mm', '.swift', '.rs', '.py', '.sh', '.rb', '.kt']
+CODE_EXTENSIONS = ['.c', '.cpp', '.h', '.hh', '.hpp', '.js', '.ts', '.m', '.mm', '.swift', '.rs', '.py', '.sh', '.rb', '.kt']
 MARKUP_EXTENSIONS = ['.json', '.xml', '.xib', '.storyboard']
 
 ALL_EXTENSIONS = TEXT_EXTENSIONS + CODE_EXTENSIONS + MARKUP_EXTENSIONS
@@ -35,15 +35,12 @@ def is_binary(file_path: str) -> bool:
         return True
 
 def remove_comments(content: str, file_extension: str) -> str:
-    if file_extension in ['.c', '.cpp', '.h', '.hh', '.hpp', '.m', '.mm', '.swift']:
+    if file_extension in ['.c', '.cpp', '.h', '.hh', '.hpp', '.m', '.mm', '.swift', '.js', '.ts', '.kt']:
         content = re.sub(r'/\*[\s\S]*?\*/', '', content)
         content = re.sub(r'//.*', '', content)
     elif file_extension in ['.py', '.sh', '.rb']:
         content = re.sub(r'#.*', '', content)
     elif file_extension == '.rs':
-        content = re.sub(r'/\*[\s\S]*?\*/', '', content)
-        content = re.sub(r'//.*', '', content)
-    elif file_extension == '.kt':
         content = re.sub(r'/\*[\s\S]*?\*/', '', content)
         content = re.sub(r'//.*', '', content)
     elif file_extension in ['.xml', '.xib', '.storyboard']:
