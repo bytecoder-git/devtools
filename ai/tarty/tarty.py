@@ -10,8 +10,8 @@ from pathspec.patterns import GitWildMatchPattern
 
 # File extensions to process
 TEXT_EXTENSIONS = ['.txt', '.csv', '.md']
-CODE_EXTENSIONS = ['.c', '.cpp', '.h', '.hh', '.hpp', '.js', '.ts', '.m', '.mm', '.swift', '.rs', '.py', '.sh', '.rb', '.kt']
-MARKUP_EXTENSIONS = ['.json', '.xml', '.xib', '.storyboard']
+CODE_EXTENSIONS = ['.c', '.cpp', '.h', '.hh', '.hpp', '.js', '.ts', '.m', '.mm', '.swift', '.rs', '.py', '.sh', '.rb', '.kt', '.go']
+MARKUP_EXTENSIONS = ['.json', '.xml', '.xib', '.storyboard', '.toml']
 
 ALL_EXTENSIONS = TEXT_EXTENSIONS + CODE_EXTENSIONS + MARKUP_EXTENSIONS
 
