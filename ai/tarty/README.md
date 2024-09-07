@@ -13,6 +13,8 @@ This Python script creates compressed custom archives suitable for AI ingestion 
 - Git-aware: compatible with Git repositories
 - Quiet mode option to suppress output
 - Detailed output about processed, skipped, and ignored files
+- Custom ignore patterns support
+- Displays compressed file sizes
 
 ## Requirements
 
@@ -45,6 +47,7 @@ python tarty.py -i <input_directory> -o <output_file> [options]
 ### Options
 
 - `-q, --quiet`: Suppress output of processed files
+- `--ignore`: Additional patterns to ignore, separated by semicolons
 
 ### Examples
 
@@ -58,23 +61,30 @@ python tarty.py -i <input_directory> -o <output_file> [options]
    python tarty.py -i /path/to/input/directory -o output_archive.txt -q
    ```
 
+3. Create an archive with custom ignore patterns:
+   ```
+   python tarty.py -i /path/to/input/directory -o output_archive.txt --ignore "file.txt;*.json;tmp/"
+   ```
+
 ## How It Works
 
 1. The script walks through the input directory and processes all supported text files.
 2. It checks for a .gitignore file in the input directory and respects its rules.
 3. Hidden files (starting with a dot) are automatically ignored.
-4. For each file:
-   - If the file is ignored by .gitignore or is hidden, it's skipped.
+4. Custom ignore patterns (if provided) are applied alongside .gitignore rules.
+5. For each file:
+   - If the file is ignored by .gitignore, custom patterns, or is hidden, it's skipped.
    - If the file is binary or has an unsupported extension, it's skipped.
    - For supported files, it removes comments and unnecessary whitespace while preserving essential structure.
-5. Processed files are added to a custom archive format, with each file preceded by a header.
-6. The resulting archive is optimized for AI ingestion, with reduced file sizes and preserved content structure.
+6. Processed files are added to a custom archive format, with each file preceded by a header.
+7. The resulting archive is optimized for AI ingestion, with reduced file sizes and preserved content structure.
+8. The script displays the compressed size of each added file.
 
 ## Supported File Types
 
 - Text: .txt, .csv, .md
-- Code: .c, .cpp, .h, .hh, .hpp, .m, .mm, .swift, .rs, .py, .sh, .rb, .kt
-- Markup: .json, .xml, .xib, .storyboard
+- Code: .c, .cpp, .h, .hh, .hpp, .js, .ts, .m, .mm, .swift, .rs, .py, .sh, .rb, .kt, .go
+- Markup: .json, .xml, .xib, .storyboard, .toml
 
 ## Important Notes
 

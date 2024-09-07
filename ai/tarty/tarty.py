@@ -23,9 +23,11 @@ def load_gitignore(directory: str) -> PathSpec:
         return PathSpec.from_lines(GitWildMatchPattern, gitignore_content.splitlines())
     return PathSpec([])
 
-def should_ignore_file(file_path: str, gitignore_spec: PathSpec) -> bool:
+def should_ignore_file(file_path: str, gitignore_spec: PathSpec, custom_ignore_spec: PathSpec) -> bool:
     file_name = os.path.basename(file_path)
-    return file_name.startswith('.') or gitignore_spec.match_file(file_path)
+    return (file_name.startswith('.') or 
+            gitignore_spec.match_file(file_path) or 
+            custom_ignore_spec.match_file(file_path))
 
 def is_binary(file_path: str) -> bool:
     try:
@@ -68,16 +70,15 @@ def compress_content(content: str, file_extension: str) -> str:
     
     return content
 
-def process_directory(input_dir: str, quiet: bool) -> List[Tuple[str, str]]:
+def process_directory(input_dir: str, quiet: bool, gitignore_spec: PathSpec, custom_ignore_spec: PathSpec) -> List[Tuple[str, str]]:
     compressed_files = []
-    gitignore_spec = load_gitignore(input_dir)
     
     for root, _, files in os.walk(input_dir):
         for file in files:
             file_path = os.path.join(root, file)
             relative_path = os.path.relpath(file_path, input_dir)
             
-            if should_ignore_file(relative_path, gitignore_spec):
+            if should_ignore_file(relative_path, gitignore_spec, custom_ignore_spec):
                 if not quiet:
                     print(f"Ignored: {relative_path}")
                 continue
@@ -102,7 +103,8 @@ def process_directory(input_dir: str, quiet: bool) -> List[Tuple[str, str]]:
                 compressed_files.append((relative_path, compressed_content))
                 
                 if not quiet:
-                    print(f"Added: {relative_path}")
+                    compressed_size = len(compressed_content.encode('utf-8'))
+                    print(f"Added: {relative_path} ({compressed_size} bytes)")
             except UnicodeDecodeError:
                 if not quiet:
                     print(f"Skipped (encoding error): {relative_path}")
@@ -126,9 +128,17 @@ def main():
     parser.add_argument("-i", "--input_dir", required=True, help="Input directory containing files to process")
     parser.add_argument("-o", "--output_file", required=True, help="Output archive file name")
     parser.add_argument("-q", "--quiet", action="store_true", help="Suppress output of processed files")
+    parser.add_argument("--ignore", help="Additional patterns to ignore, separated by semicolons")
     args = parser.parse_args()
 
-    compressed_files = process_directory(args.input_dir, args.quiet)
+    gitignore_spec = load_gitignore(args.input_dir)
+    
+    custom_ignore_patterns = []
+    if args.ignore:
+        custom_ignore_patterns = args.ignore.split(';')
+    custom_ignore_spec = PathSpec.from_lines(GitWildMatchPattern, custom_ignore_patterns)
+
+    compressed_files = process_directory(args.input_dir, args.quiet, gitignore_spec, custom_ignore_spec)
     total_bytes = create_custom_archive(compressed_files, args.output_file)
     sys.stderr.write(f"tarty archive created: {args.output_file} ({total_bytes} bytes)\n")
 
